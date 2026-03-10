@@ -31,4 +31,5 @@ jobs:
         git config --local user.name "GitHub Action"
         git add leaderboard/leaderboard.md
         git diff --quiet && git diff --staged --quiet || git commit -m "Update leaderboard"
+        git pull origin main --rebase
         git push
