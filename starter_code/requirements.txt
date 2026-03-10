@@ -6,4 +6,5 @@ scikit-learn>=1.0.0
 networkx>=2.6.0
 matplotlib>=3.4.0
 scipy>=1.7.0
+cryptography
 torchdata==0.6.1
