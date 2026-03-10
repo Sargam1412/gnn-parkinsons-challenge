@@ -21,8 +21,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 2
+          fetch-depth: 0
+
+      - name: Checkout PR files
+        run: |
+          git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-branch
+          git checkout pr-branch -- submissions/encrypted/
+          git checkout main 2>/dev/null || git checkout -
       
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -126,6 +131,7 @@ jobs:
         run: |
           python3 << 'PYEOF'
           import pandas as pd
+          import os
           import sys
           
           try:
@@ -136,7 +142,7 @@ jobs:
               username = "${{ steps.user.outputs.username }}"
               user_rank = df[df['team'] == username]['rank'].values[0]
               
-              with open('$GITHUB_OUTPUT', 'a') as f:
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
                   f.write(f"rank={user_rank}\n")
           except Exception as e:
               print(f"Error calculating rank: {e}")
